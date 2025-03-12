@@ -1,0 +1,10 @@
+.phonebook_container {
+  width: 400px;
+  margin: 0 auto;
+  font-size: 20px;
+}
+
+.title {
+  color: rgb(60, 60, 209);
+  padding-left: 10px;
+}
