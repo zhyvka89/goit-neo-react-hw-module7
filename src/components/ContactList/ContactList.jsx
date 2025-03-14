@@ -2,20 +2,19 @@ import { useSelector } from 'react-redux';
 import Contact from "../Contact/Contact";
 import Notification from "../Notification/Notification";
 import { contacts_list } from "./ContactList.module.css";
-import { getContacts } from "../../redux/contactsSlice";
-import { getFilter } from "../../redux/filterSlice";
+import { selectError, selectLoading, selectVisibleContacts } from "../../redux/contactsSlice";
 
 function ContactList() {
-  const contacts = useSelector(getContacts)
-  const searchValue = useSelector(getFilter);
-
-  const foundContacts = contacts.filter((contact) =>
-    contact.name.toLowerCase().includes(searchValue.toLowerCase())
-  );
+  const foundContacts = useSelector(selectVisibleContacts);
+  const loading = useSelector(selectLoading);
+  const isLoading = loading && foundContacts.length === 0;
+  const error = useSelector(selectError);
 
   return (
     <>
-      {contacts.length || foundContacts.length ? (
+      {isLoading && <h2>Loading...</h2>}
+      {error && <h2>{error}</h2>}
+      {foundContacts.length > 0 ? (
         <ul className={contacts_list}>
           {foundContacts.map(({ id, name, number }) => (
             <li key={id}>
@@ -31,7 +30,7 @@ function ContactList() {
         <Notification> Your contacts list is Empty! </Notification>
       )}
 
-      {!foundContacts.length && contacts.length > 0 && (
+      {!foundContacts.length && (
         <Notification> No found contacts! </Notification>
       )}
     </>
